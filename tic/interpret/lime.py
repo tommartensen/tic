@@ -8,9 +8,9 @@ from sklearn.base import BaseEstimator
 def _result(explanation: Explanation):
     '''Enrich an Explanation with feature importances and a figure.'''
     return {
-        "explanation": explanation,
-        "feature_importances": explanation.as_list(),
-        "figure": explanation.as_pyplot_figure()
+        'explanation': explanation,
+        'feature_importances': explanation.as_list(),
+        'figure': explanation.as_pyplot_figure()
     }
 
 
