@@ -10,6 +10,10 @@ from sklearn.model_selection import train_test_split
 
 
 def load_test_data():
+    '''
+    Loads the breast cancer test dataset from sklearn and prepares it for the
+    examples.
+    '''
     data = load_breast_cancer()
     X = pd.DataFrame(data.data, columns=data.feature_names)
     y = pd.Series(data.target, name=data.target_names[1])
