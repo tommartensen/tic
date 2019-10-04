@@ -1,5 +1,5 @@
 # History
 
-## 0.1.0 (2019-04-25)
+## 0.1.0 (2019-10-04)
 
-* First release.
+* Package skeleton
