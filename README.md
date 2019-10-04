@@ -11,4 +11,5 @@ The skeleton for the tic package.
 
 ### Features
 
-* TODO
+* Interface to create interpretations as:
+  * direct extraction of feature importances, e.g. from coefficients
