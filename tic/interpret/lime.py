@@ -22,7 +22,7 @@ def _create_explainer(**kwargs):
     )
 
 
-def explain_instance(
+def explain_local(
     clf: BaseEstimator,
     instance: List,
     training_data: List,
@@ -61,7 +61,7 @@ def explain_instance(
     return _result(explanation)
 
 
-def explain_dataset(
+def explain_global(
     clf: BaseEstimator,
     training_data: List,
     feature_names: List,
