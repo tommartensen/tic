@@ -1,4 +1,4 @@
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 import shap
 import pandas as pd
@@ -21,6 +21,7 @@ def explain_local(
     clf: BaseEstimator,
     X_train: pd.DataFrame,
     instance: pd.Series,
+    class_names: List,
     sample_size: Optional[int] = 100,
     explainer_kwargs: Optional[Dict] = {},
     explanation_kwargs: Optional[Dict] = {}
@@ -35,8 +36,10 @@ def explain_local(
         base_value=explainer.expected_value[0],
         shap_values=shap_values[0],
         features=instance,
+        out_names=class_names,
         matplotlib=True,
-        show=False
+        show=False,
+        **explanation_kwargs
     )
     return {
         'explainer': explainer,
@@ -49,6 +52,7 @@ def explain_global(
     clf: BaseEstimator,
     X_train: pd.DataFrame,
     X_test: pd.DataFrame,
+    class_names: List,
     sample_size: Optional[int] = 100,
     explainer_kwargs: Optional[Dict] = {},
     explanation_kwargs: Optional[Dict] = {}
@@ -63,7 +67,9 @@ def explain_global(
         base_value=explainer.expected_value[0],
         shap_values=shap_values[0],
         features=X_test,
-        show=False
+        out_names=class_names,
+        show=False,
+        **explanation_kwargs
     )
     return {
         'explainer': explainer,
