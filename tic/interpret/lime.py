@@ -22,7 +22,7 @@ def _create_explainer(**kwargs):
     )
 
 
-def explain_instance(
+def explain_local(
     clf: BaseEstimator,
     instance: List,
     training_data: List,
@@ -32,7 +32,7 @@ def explain_instance(
     explanation_kwargs: Optional[Dict] = {}
 ):
     '''
-    Creates an explainer and explains the given instance.
+    Creates an explainer and explains the given instance using LIME.
 
     Args:
         clf : Fitted classifier from sklearn
@@ -61,7 +61,7 @@ def explain_instance(
     return _result(explanation)
 
 
-def explain_dataset(
+def explain_global(
     clf: BaseEstimator,
     training_data: List,
     feature_names: List,
