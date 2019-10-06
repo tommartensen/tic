@@ -10,6 +10,10 @@ def _create_explainer(
     X_train: pd.DataFrame,
     **kwargs
 ):
+    '''
+    Creates kernel explainer from SHAP.
+    This is the most complete explainer in terms of model type coverage.
+    '''
     return shap.KernelExplainer(
         model=clf.predict_proba,
         data=X_train,
@@ -26,6 +30,21 @@ def explain_local(
     explainer_kwargs: Optional[Dict] = {},
     explanation_kwargs: Optional[Dict] = {}
 ):
+    '''
+    Creates an explainer and explains the given instance using SHAP.
+
+    Args:
+        clf : Fitted classifier from sklearn
+        X_train: data that was used to train the classifier
+        instance: instance to explain
+        class_names: names of class labels
+        sample_size: how many data points are used to create the SHAP values
+        explainer_kwargs: Keyword args passed during explainer initialization
+        explanation_kwargs: Keyword args passed for explanation
+
+    Returns:
+        Enriched SHAP explanation including figure
+    '''
     explainer = _create_explainer(
         clf=clf,
         X_train=X_train,
@@ -57,6 +76,21 @@ def explain_global(
     explainer_kwargs: Optional[Dict] = {},
     explanation_kwargs: Optional[Dict] = {}
 ):
+    '''
+    Creates an explainer and explanations for a given dataset using SHAP.
+
+    Args:
+        clf : Fitted classifier from sklearn
+        X_train: data that was used to train the classifier
+        X_test: data that should be explained
+        class_names: names of class labels
+        sample_size: how many data points are used to create the SHAP values
+        explainer_kwargs: Keyword args passed during explainer initialization
+        explanation_kwargs: Keyword args passed for explanation
+
+    Returns:
+        Enriched SHAP explanation including interactive figure
+    '''
     explainer = _create_explainer(
         clf=clf,
         X_train=X_train,

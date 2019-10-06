@@ -32,7 +32,7 @@ def explain_local(
     explanation_kwargs: Optional[Dict] = {}
 ):
     '''
-    Creates an explainer and explains the given instance.
+    Creates an explainer and explains the given instance using LIME.
 
     Args:
         clf : Fitted classifier from sklearn
