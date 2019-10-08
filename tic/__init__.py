@@ -2,7 +2,7 @@
 
 __author__ = '''Tom Martensen'''
 __email__ = 'mail@tommartensen.de'
-__version__ = '0.1.0'
+__version__ = '0.2.0'
 
 import pandas as pd
 from sklearn.datasets import load_breast_cancer

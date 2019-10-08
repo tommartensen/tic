@@ -28,6 +28,9 @@ From sources
 
 The sources for TIC can be downloaded from the `Github repo`_.
 
+Installation
+============
+
 You can either clone the public repository:
 
 .. code-block:: console

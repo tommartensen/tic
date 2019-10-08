@@ -7,7 +7,6 @@ You can contribute in many ways:
 
 ## Types of Contributions
 
-
 ### Report Bugs
 
 Report bugs at https://github.com/tommartensen/tic/issues/new.
@@ -50,37 +49,38 @@ If you are proposing a feature:
 Ready to contribute? Here's how to set up `tic` for local development.
 
 1. Fork the `tic` repo on GitLab.
-2. Clone your fork locally::
+2. Clone your fork locally:
 
     `$ git clone git@github.com:tommartensen/tic.git`
 
-3. Install your local copy into a virtualenv. Assuming you have virtualenvwrapper installed, this is how you set up your fork for local development::
+3. Install your local copy into a virtualenv. Assuming you have virtualenvwrapper installed, this is how you set up your fork for local development:
+```bash
+$ mkvirtualenv tic
+$ cd tic/
+$ python setup.py develop
 ```
-    $ mkvirtualenv tic
-    $ cd tic/
-    $ python setup.py develop
-```
-4. Create a branch for local development::
+4. Create a branch for local development.
 
-    `$ git checkout -b name-of-your-bugfix-or-feature`
-
-   Now you can make your changes locally.
+`$ git checkout -b name-of-your-bugfix-or-feature`
 
 5. When you're done making changes, check that your changes pass flake8 and the
-   tests, including testing other Python versions with tox::
-```
-    $ flake8 tic tests
-    $ python setup.py test or py.test
-    $ tox
-```
+   tests, including testing other Python versions with tox.
    To get flake8 and tox, just pip install them into your virtualenv.
 
-6. Commit your changes and push your branch to GitLab::
+```bash
+$ flake8 tic tests
+$ python setup.py test or py.test
+$ tox
 ```
-    $ git add .
-    $ git commit -m "Your detailed description of your changes."
-    $ git push origin name-of-your-bugfix-or-feature
+
+6. Commit your changes and push your branch to GitLab:
+
+```bash
+$ git add .
+$ git commit -m "Your detailed description of your changes."
+$ git push origin name-of-your-bugfix-or-feature
 ```
+
 7. Submit a pull request through the GitLab website.
 
 ## Pull Request Guidelines
@@ -96,19 +96,20 @@ Before you submit a pull request, check that it meets these guidelines:
 
 ## Tips
 
-To run a subset of tests::
+To run a subset of tests:
 
 `$ py.test tests.test_tic`
-
 
 ## Deploying
 
 A reminder for the maintainers on how to deploy.
 Make sure all your changes are committed (including an entry in HISTORY.md).
-Then run::
+Then run:
+
+```bash
+$ bumpversion patch # possible: major / minor / patch
+$ git push
+$ git push --tags
 ```
-    $ bumpversion patch # possible: major / minor / patch
-    $ git push
-    $ git push --tags
-```
+
 Travis will then deploy to PyPI if tests pass.

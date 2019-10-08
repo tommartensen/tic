@@ -7,7 +7,7 @@ from sklearn.base import BaseEstimator
 def explain_global(
     clf: BaseEstimator,
     feature_names: List,
-    absolute_values: Optional[bool] = True,
+    absolute_values: Optional[bool] = False,
     sort: Optional[bool] = True,
     num_features: Optional[int] = None
 ):
