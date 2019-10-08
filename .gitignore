@@ -1,3 +1,7 @@
 .tox/
 .coverage
-
+docs/
+tic/
+tic.egg-info/
+build/
+dist/
