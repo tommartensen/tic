@@ -76,6 +76,13 @@ docs: ## generate Sphinx HTML documentation, including API docs
 servedocs: docs ## compile the docs watching for changes
 	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
 
+release-docs: docs ## move the docs to gh-pages branch
+	-rm -rf /tmp/tic_html
+	cp -r docs/_build/html /tmp/tic_html
+	git checkout gh-pages
+	cp -r /tmp/tic-html/* .
+	git status
+
 release: dist ## package and upload a release
 	twine upload dist/*
 
