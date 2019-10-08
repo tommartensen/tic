@@ -1,0 +1,177 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>tic.interpret.surrogate &#8212; TIC 0.1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for tic.interpret.surrogate</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="k">import</span> <span class="n">BaseEstimator</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="k">import</span> <span class="n">DecisionTreeClassifier</span>
+
+<span class="kn">from</span> <span class="nn">tic.interpret.feature_importance</span> <span class="k">import</span> <span class="n">explain_global</span> <span class="k">as</span> <span class="n">direct_fi</span>
+
+
+<div class="viewcode-block" id="explain_global"><a class="viewcode-back" href="../../../tic.interpret.html#tic.interpret.surrogate.explain_global">[docs]</a><span class="k">def</span> <span class="nf">explain_global</span><span class="p">(</span>
+    <span class="n">clf</span><span class="p">:</span> <span class="n">BaseEstimator</span><span class="p">,</span>
+    <span class="n">surrogate_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">X_train</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+    <span class="n">num_features</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">surrogate_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
+    <span class="n">feature_importances_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Creates a surrogate model that mimics the behavior of the original model.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        clf : Fitted classifier from sklearn</span>
+<span class="sd">        surrogate_type: Type of surrogate model, linear or tree</span>
+<span class="sd">        X_train: DataFrame with the original training data</span>
+<span class="sd">        num_features: how many feature importances should be returned</span>
+<span class="sd">        surrogate_kwargs: Keyword args passed during surrogate initialization</span>
+<span class="sd">        feature_importances_kwargs: Kwargs passed for feature importance method</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Surrogate model with its feature importances</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">surrogate_type</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span><span class="p">:</span>
+        <span class="n">surrogate_clf</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="o">**</span><span class="n">surrogate_kwargs</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">surrogate_type</span> <span class="o">==</span> <span class="s1">&#39;tree&#39;</span><span class="p">:</span>
+        <span class="n">surrogate_clf</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="o">**</span><span class="n">surrogate_kwargs</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s1">&#39;surrogate_type must be linear or tree&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Get feature importances for surrogate model that contains all features</span>
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+    <span class="n">surrogate_clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+    <span class="n">feature_importances</span> <span class="o">=</span> <span class="n">direct_fi</span><span class="p">(</span>
+        <span class="n">clf</span><span class="o">=</span><span class="n">surrogate_clf</span><span class="p">,</span>
+        <span class="n">feature_names</span><span class="o">=</span><span class="n">X_train</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span>
+        <span class="n">num_features</span><span class="o">=</span><span class="n">num_features</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">feature_importances_kwargs</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Get feature importances for surrogate model with only the `num_features`</span>
+    <span class="c1"># most important features from the last step</span>
+    <span class="n">most_relevant_features</span> <span class="o">=</span> <span class="n">X_train</span><span class="p">[[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">feature_importances</span><span class="p">]]</span>
+    <span class="n">surrogate_clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">most_relevant_features</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+    <span class="n">feature_importances</span> <span class="o">=</span> <span class="n">direct_fi</span><span class="p">(</span>
+        <span class="n">clf</span><span class="o">=</span><span class="n">surrogate_clf</span><span class="p">,</span>
+        <span class="n">feature_names</span><span class="o">=</span><span class="n">most_relevant_features</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">feature_importances_kwargs</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;surrogate&#39;</span><span class="p">:</span> <span class="n">surrogate_clf</span><span class="p">,</span>
+        <span class="s1">&#39;feature_importances&#39;</span><span class="p">:</span> <span class="n">feature_importances</span><span class="p">,</span>
+    <span class="p">}</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">TIC</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Library to the Toolbox for Interpretability Comparison</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">tic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../history.html">History</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  <li><a href="../../tic.html">tic</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Tom Martensen.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
