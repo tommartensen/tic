@@ -4,10 +4,9 @@
 ![PyPI](https://img.shields.io/pypi/v/tic)
 
 * Free software: MIT license
-* Documentation: https://tic.readthedocs.io.
-* Examples: [examples/](examples/)
+* Documentation: https://tommartensen.de/tic.
 
-### Features
+## Features
 
 * Interface to create interpretations as:
   * direct extraction of feature importances, e.g. from coefficients

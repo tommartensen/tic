@@ -20,9 +20,10 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('..'))
 
 import tic
+
+sys.path.insert(0, os.path.abspath('..'))
 
 # -- General configuration ---------------------------------------------
 
@@ -32,7 +33,11 @@ import tic
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'recommonmark']
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.viewcode',
+    'm2r'
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -40,8 +45,7 @@ templates_path = ['_templates']
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
-# source_suffix = ['.rst', '.md']
-source_suffix = '.rst'
+source_suffix = ['.rst', '.md']
 
 # The master toctree document.
 master_doc = 'index'
@@ -158,3 +162,12 @@ texinfo_documents = [
      'One line description of project.',
      'Miscellaneous'),
 ]
+
+intersphinx_mapping = {
+    'python': ('http://docs.python.org/3/', None),
+    'pandas': ('http://pandas.pydata.org/pandas-docs/stable/', None),
+}
+
+
+def setup(app):
+    app.add_javascript('copybutton.js')
