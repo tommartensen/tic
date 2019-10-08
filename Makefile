@@ -80,7 +80,7 @@ release-docs: docs ## move the docs to gh-pages branch
 	-rm -rf /tmp/tic_html
 	cp -r docs/_build/html /tmp/tic_html
 	git checkout gh-pages
-	cp -r /tmp/tic-html/* .
+	cp -r /tmp/tic_html/* .
 	git status
 
 release: dist ## package and upload a release
